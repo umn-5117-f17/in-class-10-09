@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-// var ObjectID = require('mongodb').ObjectID;
+var ObjectID = require('mongodb').ObjectID;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -21,8 +21,26 @@ router.get('/', function(req, res, next) {
 
 /* GET home page. */
 router.get('/delete-one', function(req, res, next) {
-  console.log("TODO");
-  res.redirect('/');
+
+  var c = req.db.collection('max_todo');
+  c.findOne(function(err, result) {
+    if (err) {
+      next(err);
+    }
+
+    // result._id;
+    var s = "" + result._id;
+
+    c.deleteOne({"_id": ObjectID(s)}, function(err, result) {
+      if (err) {
+        next(err);
+      }
+
+      res.redirect('/');
+    });
+
+  });
+
 });
 
 module.exports = router;
